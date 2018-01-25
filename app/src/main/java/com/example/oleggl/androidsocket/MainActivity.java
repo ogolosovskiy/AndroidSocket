@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
                     socket = new DatagramSocket(); // 0, InetAddress.getLocalHost());
 
-                    socket.setOption(SocketOptions.IP_TOS, new Integer(0x22)  );
+                    socket.setTrafficClass(0x22); //setOption(SocketOptions.IP_TOS, new Integer(0x22)  );
 
                     String s = "Hello, Android";
                     stringToPacket(s, packet);
