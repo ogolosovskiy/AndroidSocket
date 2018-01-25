@@ -49,36 +49,47 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.i("SocketTest", "button pressed ");
 
-                byte[] buffer = new byte[256];
-                DatagramSocket socket = null;
 
-                try {
-                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                new Thread(new Runnable() {
+                    public void run() {
 
-                    InetAddress addr = InetAddress.getByName("77.120.105.29");
+                        byte[] buffer = new byte[256];
+                        DatagramSocket socket = null;
 
-                    socket = new DatagramSocket(); // 0, InetAddress.getLocalHost());
+                        try {
 
-                    socket.setTrafficClass(0x22); //setOption(SocketOptions.IP_TOS, new Integer(0x22)  );
+                            // echo -n "foo" | nc -u -w1 192.168.1.142 7777
+                            // nc -ul 192.168.1.142 7777
 
-                    String s = "Hello, Android";
-                    stringToPacket(s, packet);
-                    packet.setAddress(addr);
-                    packet.setPort(7777);
+                            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
-                    socket.send(packet);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally
-                {
-                    if (socket != null) {
-                        socket.close();
+                            InetAddress addr = InetAddress.getByName("192.168.1.142");
+
+                            socket = new DatagramSocket(); // 0, InetAddress.getLocalHost());
+
+                            socket.setTrafficClass(0x22); //setOption(SocketOptions.IP_TOS, new Integer(0x22)  );
+
+                            String s = "Hello, Android";
+                            stringToPacket(s, packet);
+                            packet.setAddress(addr);
+                            packet.setPort(7777);
+
+                            socket.send(packet);
+                        } catch (UnknownHostException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally
+                        {
+                            if (socket != null) {
+                                socket.close();
+                            }
+                        }
+
                     }
-                }
+                }).start();
 
             }
         });
